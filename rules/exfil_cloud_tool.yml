@@ -1,0 +1,36 @@
+title: Exfiltration Tool Execution
+id: 30cfe233-b629-4b88-9eb2-c7d8e9fa0b1c
+status: experimental
+description: Cong cu dong bo/day du lieu ra cloud (rclone, megacmd, mega.exe) hoac curl POST file lon
+references:
+    - https://attack.mitre.org/techniques/T1567/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.exfiltration
+    - attack.t1567.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_tool:
+        Image|endswith:
+            - '\rclone.exe'
+            - '\megacmd.exe'
+            - '\megaclient.exe'
+            - '\mega.exe'
+            - '\filezilla.exe'
+            - '\winscp.exe'
+    selection_curl:
+        Image|endswith:
+            - '\curl.exe'
+            - '\powershell.exe'
+        CommandLine|contains:
+            - 'Invoke-RestMethod'
+            - 'Invoke-WebRequest'
+            - '--upload-file'
+            - '-F file='
+    condition: 1 of selection_*
+falsepositives:
+    - Backup hop le ra cloud - can whitelist theo host va tai khoan
+level: medium

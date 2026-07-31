@@ -1,0 +1,29 @@
+title: DNS Enumeration Tool Execution
+id: 3c2b5d22-1c8f-4b0e-8a12-2d3e4f5a6b72
+status: experimental
+description: Phat hien lenh liet ke DNS (nslookup -type=any, dnsrecon, adfind) - Recon truoc khi di ngang
+references:
+    - https://attack.mitre.org/techniques/T1590/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.reconnaissance
+    - attack.t1590.002
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_nslookup:
+        Image|endswith: '\nslookup.exe'
+        CommandLine|contains:
+            - '-type=any'
+            - '-type=srv'
+            - 'ls -d'
+    selection_tools:
+        Image|endswith:
+            - '\dnsrecon.exe'
+            - '\adfind.exe'
+    condition: 1 of selection_*
+falsepositives:
+    - Admin mang chan doan DNS
+level: medium

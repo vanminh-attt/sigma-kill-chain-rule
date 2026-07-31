@@ -1,0 +1,31 @@
+title: Lateral Movement via PsExec Service
+id: 41d0f344-c73a-4c99-afc3-d8e9fa0b1c2d
+status: test
+description: Dau vet PsExec (PSEXESVC) - tao dich vu tu xa de chay lenh tren may khac
+references:
+    - https://attack.mitre.org/techniques/T1021/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.lateral-movement
+    - attack.execution
+    - attack.t1021.002
+    - attack.t1570
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_svc:
+        Image|endswith:
+            - '\psexesvc.exe'
+            - '\paexec.exe'
+            - '\csexecsvc.exe'
+    selection_client:
+        Image|endswith:
+            - '\psexec.exe'
+            - '\psexec64.exe'
+        CommandLine|contains: '\\\\'
+    condition: 1 of selection_*
+falsepositives:
+    - Admin dung PsExec de van hanh - nen whitelist theo host quan tri
+level: high

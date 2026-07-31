@@ -1,0 +1,23 @@
+title: File Dropped into Startup Folder
+id: 85142c77-0b7e-40dd-e907-1c2d3e4f5061
+status: test
+description: File duoc ghi vao thu muc Startup - persistence don gian nhung van rat pho bien
+references:
+    - https://attack.mitre.org/techniques/T1547/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection:
+        TargetFilename|contains: '\Start Menu\Programs\Startup\'
+    filter_explorer:
+        Image|endswith: '\explorer.exe'
+    condition: selection and not filter_explorer
+falsepositives:
+    - Phan mem tu them shortcut khi cai
+level: high

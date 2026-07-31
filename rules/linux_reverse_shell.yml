@@ -1,0 +1,36 @@
+title: Linux Reverse Shell Command Line
+id: eb7a8ddd-61d4-4633-4f6d-728394a5b6c7
+status: experimental
+description: Cu phap reverse shell pho bien tren Linux (/dev/tcp, nc -e, python socket, socat)
+references:
+    - https://attack.mitre.org/techniques/T1059/004/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.execution
+    - attack.command-and-control
+    - attack.t1059.004
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_devtcp:
+        CommandLine|contains:
+            - '/dev/tcp/'
+            - '/dev/udp/'
+    selection_nc:
+        CommandLine|contains:
+            - 'nc -e '
+            - 'ncat -e '
+            - 'nc -c '
+            - 'socat tcp-connect'
+            - 'socat exec'
+    selection_script:
+        CommandLine|contains:
+            - 'socket.socket(socket.AF_INET'
+            - 'pty.spawn'
+            - 'perl -e' 
+    condition: 1 of selection_*
+falsepositives:
+    - Script chan doan mang cua admin
+level: high

@@ -1,0 +1,40 @@
+title: Successful Network Logon
+id: 85b3e2cc-3333-4444-8555-ccccddddeeee
+status: experimental
+description: Dang nhap mang thanh cong (Security 4624 logon type 3)
+references:
+    - https://attack.mitre.org/techniques/T1021/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.lateral-movement
+    - attack.t1021
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 4624
+        LogonType: 3
+    filter_machine:
+        TargetUserName|endswith: '$'
+    condition: selection and not filter_machine
+falsepositives:
+    - Truy cap file share binh thuong
+level: informational
+---
+title: One Account Authenticating to Many Hosts
+id: 96c4f3dd-4444-4555-8666-ddddeeeeffff
+status: experimental
+description: Mot tai khoan dang nhap mang vao tu 5 may khac nhau trong 15 phut - dau hieu di ngang
+correlation:
+    type: value_count
+    rules:
+        - 85b3e2cc-3333-4444-8555-ccccddddeeee
+    group-by:
+        - TargetUserName
+    timespan: 15m
+    condition:
+        gte: 5
+        field: ComputerName
+level: high

@@ -1,0 +1,36 @@
+title: Active Directory Reconnaissance via Native Tools
+id: 4d3c6e33-2d90-4c1f-9b23-3e4f5a6b7c83
+status: experimental
+description: Phat hien liet ke domain admin, domain controller, trust bang net.exe / nltest / dsquery
+references:
+    - https://attack.mitre.org/techniques/T1087/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.discovery
+    - attack.t1087.002
+    - attack.t1482
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_net:
+        Image|endswith:
+            - '\net.exe'
+            - '\net1.exe'
+        CommandLine|contains:
+            - 'group "domain admins"'
+            - 'group /domain'
+            - 'user /domain'
+            - 'accounts /domain'
+    selection_nltest:
+        Image|endswith: '\nltest.exe'
+        CommandLine|contains:
+            - '/domain_trusts'
+            - '/dclist'
+    selection_dsquery:
+        Image|endswith: '\dsquery.exe'
+    condition: 1 of selection_*
+falsepositives:
+    - Script kiem ke cua admin AD
+level: medium

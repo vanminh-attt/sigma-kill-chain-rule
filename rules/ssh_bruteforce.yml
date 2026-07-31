@@ -1,0 +1,37 @@
+title: SSH Failed Login
+id: 63f1c0aa-1111-4222-8333-aaaabbbbcccc
+status: experimental
+description: Mot lan dang nhap SSH that bai tren Linux
+references:
+    - https://attack.mitre.org/techniques/T1110/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.credential-access
+    - attack.t1110.001
+logsource:
+    product: linux
+    service: sshd
+detection:
+    selection:
+        - 'Failed password for'
+        - 'Invalid user'
+    condition: selection
+falsepositives:
+    - Nguoi dung nhap sai mat khau
+level: informational
+---
+title: SSH Brute Force Attempt
+id: 74a2d1bb-2222-4333-8444-bbbbccccdddd
+status: experimental
+description: Tu 10 lan dang nhap SSH that bai tro len tren cung mot host trong 5 phut
+correlation:
+    type: event_count
+    rules:
+        - 63f1c0aa-1111-4222-8333-aaaabbbbcccc
+    group-by:
+        - host
+    timespan: 5m
+    condition:
+        gte: 10
+level: high

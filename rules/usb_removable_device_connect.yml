@@ -1,0 +1,24 @@
+title: Removable Storage Device Connected
+id: 9c8b1388-72e5-4164-8078-8d9eafb0c1d8
+status: experimental
+description: Thiet bi luu tru roi duoc gan vao may (Security 6416 - PnP device install) - kenh Delivery qua USB
+references:
+    - https://attack.mitre.org/techniques/T1091/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.initial-access
+    - attack.lateral-movement
+    - attack.t1091
+logsource:
+    product: windows
+    service: security
+    definition: 'Yeu cau bat Audit PNP Activity (Advanced Audit Policy > Detailed Tracking)'
+detection:
+    selection:
+        EventID: 6416
+        ClassId|contains: 'USBSTOR'
+    condition: selection
+falsepositives:
+    - Nguoi dung cam USB hop le
+level: low

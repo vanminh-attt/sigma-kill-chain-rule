@@ -1,0 +1,23 @@
+title: WMI Event Subscription Persistence
+id: 74031b66-fa6d-49cc-d8f6-0b1c2d3e4f50
+status: test
+description: Tao WMI Event Filter/Consumer/Binding (Sysmon 19/20/21) - persistence an, kho phat hien
+references:
+    - https://attack.mitre.org/techniques/T1546/003/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1546.003
+logsource:
+    product: windows
+    category: wmi_event
+    definition: 'Yeu cau bat WmiEvent trong config Sysmon'
+detection:
+    selection:
+        Operation: 'Created'
+    condition: selection
+falsepositives:
+    - SCCM va mot so phan mem quan tri dung WMI subscription
+level: high

@@ -1,0 +1,33 @@
+title: Suspicious Payload Container Written to Disk
+id: 6f5e8055-4fb2-4e31-9d45-5a6b7c8d9ea5
+status: experimental
+description: File dinh dang dong goi payload (.hta .iso .img .vhd .scr) duoc ghi vao thu muc nguoi dung
+references:
+    - https://attack.mitre.org/techniques/T1027/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.resource-development
+    - attack.stealth
+    - attack.t1027
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection:
+        TargetFilename|endswith:
+            - '.hta'
+            - '.iso'
+            - '.img'
+            - '.vhd'
+            - '.vhdx'
+            - '.scr'
+        TargetFilename|contains:
+            - '\Users\'
+            - '\Temp\'
+    filter_installers:
+        Image|startswith: 'C:\Program Files'
+    condition: selection and not filter_installers
+falsepositives:
+    - Nguoi dung tai file ISO hop le (cai OS, driver)
+level: medium

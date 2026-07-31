@@ -1,0 +1,32 @@
+title: New Windows Service Installed
+id: 52e1f944-d84b-47aa-b6d4-e3fa0b1c2d3e
+status: test
+description: Dich vu moi duoc cai (System 7045) - ky thuat persistence va cung la dau vet cua PsExec / Mimikatz driver
+references:
+    - https://attack.mitre.org/techniques/T1543/003/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1543.003
+logsource:
+    product: windows
+    service: system
+detection:
+    selection:
+        Provider_Name: 'Service Control Manager'
+        EventID: 7045
+    selection_susp:
+        ImagePath|contains:
+            - '\Users\'
+            - '\Temp\'
+            - '\ProgramData\'
+            - 'powershell'
+            - '-enc'
+            - 'cmd.exe /c'
+            - '\PSEXESVC'
+    condition: all of selection*
+falsepositives:
+    - Trinh cai dat phan mem tao service tam
+level: high

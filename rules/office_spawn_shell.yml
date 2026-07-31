@@ -1,0 +1,42 @@
+title: Office Application Spawning Shell or Script Interpreter
+id: 0d9c2499-83f6-4275-9189-9eafb0c1d2e9
+status: test
+description: Ung dung Office sinh tien trinh con la shell/script (cmd, powershell, wscript, mshta, regsvr32) - dau hieu Exploitation qua macro hoac lo hong tai lieu
+references:
+    - https://attack.mitre.org/techniques/T1204/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.execution
+    - attack.t1204.002
+    - attack.t1566.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '\winword.exe'
+            - '\excel.exe'
+            - '\powerpnt.exe'
+            - '\outlook.exe'
+            - '\msaccess.exe'
+            - '\visio.exe'
+            - '\onenote.exe'
+    selection_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\wscript.exe'
+            - '\cscript.exe'
+            - '\mshta.exe'
+            - '\regsvr32.exe'
+            - '\rundll32.exe'
+            - '\certutil.exe'
+            - '\bitsadmin.exe'
+            - '\curl.exe'
+    condition: all of selection_*
+falsepositives:
+    - Macro nghiep vu duoc phe duyet (nen them filter theo hash/duong dan)
+level: high

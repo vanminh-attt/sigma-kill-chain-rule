@@ -1,0 +1,29 @@
+title: Windows Event Log Cleared
+id: 1eadc011-9407-4966-7c90-a5b6c7d8e9fa
+status: test
+description: Xoa event log bang wevtutil / PowerShell Clear-EventLog / Remove-EventLog - xoa dau vet
+references:
+    - https://attack.mitre.org/techniques/T1070/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.defense-impairment
+    - attack.t1685.005
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_wevtutil:
+        Image|endswith: '\wevtutil.exe'
+        CommandLine|contains:
+            - ' cl '
+            - 'clear-log'
+    selection_ps:
+        CommandLine|contains:
+            - 'Clear-EventLog'
+            - 'Remove-EventLog'
+            - 'Limit-EventLog'
+    condition: 1 of selection_*
+falsepositives:
+    - Script bao tri log (nen whitelist theo tai khoan dich vu)
+level: high

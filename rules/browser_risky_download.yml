@@ -1,0 +1,39 @@
+title: Risky File Extension Downloaded by Browser
+id: 7a6f9166-50c3-4f42-8e56-6b7c8d9eafb6
+status: experimental
+description: Trinh duyet ghi ra file thuc thi/script (.exe .js .lnk .hta .iso .vbs) - buoc Delivery qua tai xuong
+references:
+    - https://attack.mitre.org/techniques/T1189/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.initial-access
+    - attack.t1189
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection_browser:
+        Image|endswith:
+            - '\chrome.exe'
+            - '\msedge.exe'
+            - '\firefox.exe'
+            - '\brave.exe'
+    selection_ext:
+        TargetFilename|endswith:
+            - '.exe'
+            - '.js'
+            - '.jse'
+            - '.vbs'
+            - '.vbe'
+            - '.lnk'
+            - '.hta'
+            - '.iso'
+            - '.img'
+            - '.ps1'
+            - '.bat'
+            - '.cmd'
+    condition: all of selection_*
+falsepositives:
+    - Nguoi dung tai phan mem hop le
+level: low

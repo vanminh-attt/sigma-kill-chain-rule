@@ -1,0 +1,29 @@
+title: Remote Access Software Execution
+id: da697ccc-50c3-4522-3e5c-61728394a5b6
+status: test
+description: Cong cu remote access thuong bi lam dung de duy tri kenh dieu khien (AnyDesk, ScreenConnect, RustDesk, ngrok)
+references:
+    - https://attack.mitre.org/techniques/T1219/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.command-and-control
+    - attack.t1219
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        Image|endswith:
+            - '\anydesk.exe'
+            - '\rustdesk.exe'
+            - '\ngrok.exe'
+            - '\screenconnect.clientservice.exe'
+            - '\atera_agent.exe'
+            - '\splashtop.exe'
+            - '\gotohttp.exe'
+            - '\ammyy_admin.exe'
+    condition: selection
+falsepositives:
+    - Cong cu ho tro IT duoc phe duyet - can whitelist theo chinh sach
+level: medium

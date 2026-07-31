@@ -1,0 +1,23 @@
+title: LSASS Dump via comsvcs.dll MiniDump
+id: fc8b9eee-72e5-4744-5a7e-8394a5b6c7d8
+status: test
+description: rundll32 goi comsvcs.dll MiniDump de dump bo nho LSASS - lay credential ma khong can mimikatz.exe
+references:
+    - https://attack.mitre.org/techniques/T1003/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection:
+        CommandLine|contains|all:
+            - 'comsvcs.dll'
+            - 'MiniDump'
+    condition: selection
+falsepositives:
+    - Rat it - gan nhu luon dang dieu tra
+level: critical

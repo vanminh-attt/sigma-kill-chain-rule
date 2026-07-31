@@ -1,0 +1,37 @@
+title: Network Connection Initiated by LOLBin
+id: a7364e99-2d90-42ff-0b29-3e4f50617283
+status: test
+description: Tien trinh he thong khong nen ra Internet (certutil, mshta, regsvr32, rundll32, bitsadmin) mo ket noi mang - kenh tai payload / C2
+references:
+    - https://attack.mitre.org/techniques/T1105/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.command-and-control
+    - attack.t1105
+    - attack.t1071.001
+logsource:
+    product: windows
+    category: network_connection
+detection:
+    selection:
+        Initiated: 'true'
+        Image|endswith:
+            - '\certutil.exe'
+            - '\mshta.exe'
+            - '\regsvr32.exe'
+            - '\rundll32.exe'
+            - '\bitsadmin.exe'
+            - '\cscript.exe'
+            - '\wscript.exe'
+            - '\installutil.exe'
+            - '\msbuild.exe'
+    filter_local:
+        DestinationIp|startswith:
+            - '10.'
+            - '192.168.'
+            - '127.'
+    condition: selection and not filter_local
+falsepositives:
+    - Cap nhat chung chi qua certutil trong mot so moi truong
+level: high

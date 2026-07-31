@@ -1,0 +1,28 @@
+title: Directory Service Replication Rights Abuse (DCSync)
+id: 52e10455-d84b-4daa-b0d4-e9fa0b1c2d3e
+status: experimental
+description: Truy cap quyen DS-Replication-Get-Changes tren AD (Security 4662) - dau hieu DCSync lay hash toan domain
+references:
+    - https://attack.mitre.org/techniques/T1003/006/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.credential-access
+    - attack.t1003.006
+logsource:
+    product: windows
+    service: security
+    definition: 'Chi co tren Domain Controller, yeu cau bat Audit Directory Service Access'
+detection:
+    selection:
+        EventID: 4662
+        Properties|contains:
+            - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'
+            - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'
+            - '89e95b76-444d-4c62-991a-0facbeda640c'
+    filter_machine:
+        SubjectUserName|endswith: '$'
+    condition: selection and not filter_machine
+falsepositives:
+    - Tai khoan dong bo AD hop le (Azure AD Connect) - phai whitelist
+level: critical

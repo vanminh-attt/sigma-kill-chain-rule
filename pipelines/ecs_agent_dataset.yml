@@ -1,0 +1,54 @@
+name: Elastic Agent data stream narrowing
+priority: 30
+transformations:
+  - id: sysmon_dataset
+    type: add_condition
+    conditions:
+      event.dataset: windows.sysmon_operational
+    rule_cond_op: or
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: process_creation
+      - type: logsource
+        product: windows
+        category: file_event
+      - type: logsource
+        product: windows
+        category: registry_set
+      - type: logsource
+        product: windows
+        category: network_connection
+      - type: logsource
+        product: windows
+        category: dns_query
+      - type: logsource
+        product: windows
+        category: process_access
+      - type: logsource
+        product: windows
+        category: wmi_event
+  - id: pwsh_dataset
+    type: add_condition
+    conditions:
+      event.dataset: windows.powershell_operational
+    rule_conditions:
+      - type: logsource
+        product: windows
+        category: ps_script
+  - id: security_dataset
+    type: add_condition
+    conditions:
+      event.dataset: system.security
+    rule_conditions:
+      - type: logsource
+        product: windows
+        service: security
+  - id: system_dataset
+    type: add_condition
+    conditions:
+      event.dataset: system.system
+    rule_conditions:
+      - type: logsource
+        product: windows
+        service: system

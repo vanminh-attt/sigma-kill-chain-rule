@@ -1,0 +1,29 @@
+title: File Download via certutil
+id: b8475faa-3ea1-4300-1c3a-4f5061728394
+status: test
+description: certutil.exe duoc dung lam cong cu tai file (-urlcache / -verifyctl) hoac giai ma base64
+references:
+    - https://attack.mitre.org/techniques/T1105/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.command-and-control
+    - attack.stealth
+    - attack.t1105
+    - attack.t1140
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_img:
+        Image|endswith: '\certutil.exe'
+    selection_cli:
+        CommandLine|contains|windash:
+            - ' -urlcache '
+            - ' -verifyctl '
+            - ' -decode '
+            - ' -encode '
+    condition: all of selection_*
+falsepositives:
+    - Quy trinh quan ly chung chi noi bo
+level: high

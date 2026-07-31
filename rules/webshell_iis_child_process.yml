@@ -1,0 +1,38 @@
+title: Web Server Process Spawning Command Shell (Webshell)
+id: 1eadb500-9407-4386-9290-afb0c1d2e3fa
+status: test
+description: Tien trinh web server (w3wp, httpd, php-cgi, tomcat) sinh shell - dau hieu webshell / khai thac ung dung web cong khai
+references:
+    - https://attack.mitre.org/techniques/T1505/003/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.t1505.003
+    - attack.t1190
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '\w3wp.exe'
+            - '\httpd.exe'
+            - '\nginx.exe'
+            - '\php-cgi.exe'
+            - '\tomcat.exe'
+            - '\ws_tomcatservice.exe'
+    selection_child:
+        Image|endswith:
+            - '\cmd.exe'
+            - '\powershell.exe'
+            - '\pwsh.exe'
+            - '\net.exe'
+            - '\net1.exe'
+            - '\whoami.exe'
+            - '\certutil.exe'
+    condition: all of selection_*
+falsepositives:
+    - Ung dung web goi script quan tri hop le
+level: critical

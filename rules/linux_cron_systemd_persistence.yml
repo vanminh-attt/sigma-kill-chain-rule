@@ -1,0 +1,38 @@
+title: Linux Persistence via Cron or Systemd
+id: 96253d88-1c8f-41ee-fa18-2d3e4f506172
+status: experimental
+description: Sua crontab hoac tao/enable systemd unit - persistence tren Linux
+references:
+    - https://attack.mitre.org/techniques/T1053/003/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.t1053.003
+    - attack.t1543.002
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_cron:
+        Image|endswith: '/crontab'
+        CommandLine|contains:
+            - ' -e'
+            - ' -l -u'
+    selection_systemd:
+        Image|endswith: '/systemctl'
+        CommandLine|contains:
+            - 'enable'
+            - 'daemon-reload'
+    selection_write:
+        Image|endswith:
+            - '/tee'
+            - '/dd'
+        CommandLine|contains:
+            - '/etc/cron'
+            - '/etc/systemd/system'
+            - '.service'
+    condition: 1 of selection_*
+falsepositives:
+    - Cong viec quan tri he thong binh thuong - can whitelist theo user
+level: medium

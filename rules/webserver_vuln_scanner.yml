@@ -1,0 +1,29 @@
+title: Web Vulnerability Scanner User Agent
+id: 2f1a4c11-0b7e-4a9d-9f01-1c2d3e4f5a61
+status: experimental
+description: Phat hien user-agent cua cong cu quet lo hong (Nikto, sqlmap, Nmap NSE, gobuster) trong log web server - dau hieu Reconnaissance tu ben ngoai
+references:
+    - https://attack.mitre.org/techniques/T1595/002/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.reconnaissance
+    - attack.t1595.002
+logsource:
+    category: webserver
+detection:
+    selection:
+        cs-user-agent|contains:
+            - 'Nikto'
+            - 'sqlmap'
+            - 'Nmap Scripting Engine'
+            - 'dirbuster'
+            - 'gobuster'
+            - 'Wfuzz'
+            - 'masscan'
+            - 'Nessus'
+            - 'WPScan'
+    condition: selection
+falsepositives:
+    - Doi pentest noi bo dang quet co phep
+level: medium

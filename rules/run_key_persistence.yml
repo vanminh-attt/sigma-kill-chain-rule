@@ -1,0 +1,34 @@
+title: Persistence via Registry Run Key
+id: 41d0e833-c73a-4699-a5c3-d2e3fa0b1c2d
+status: test
+description: Ghi gia tri vao Run/RunOnce de tu dong chay khi dang nhap
+references:
+    - https://attack.mitre.org/techniques/T1547/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.t1547.001
+logsource:
+    product: windows
+    category: registry_set
+detection:
+    selection:
+        TargetObject|contains:
+            - '\CurrentVersion\Run\'
+            - '\CurrentVersion\RunOnce\'
+            - '\CurrentVersion\RunOnceEx\'
+            - '\CurrentVersion\Policies\Explorer\Run\'
+    selection_susp_value:
+        Details|contains:
+            - '\AppData\'
+            - '\Temp\'
+            - '\ProgramData\'
+            - 'powershell'
+            - 'mshta'
+            - 'rundll32'
+            - 'cmd.exe /c'
+    condition: all of selection*
+falsepositives:
+    - Phan mem cai dat hop le tu ProgramData
+level: high

@@ -1,0 +1,35 @@
+title: Linux Web Server Spawning Shell
+id: 30cfd722-b629-45a8-b4b2-c1d2e3fa0b1c
+status: experimental
+description: apache2/nginx/php-fpm sinh /bin/sh hoac /bin/bash - dau hieu webshell tren Linux
+references:
+    - https://attack.mitre.org/techniques/T1505/003/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.t1505.003
+logsource:
+    product: linux
+    category: process_creation
+detection:
+    selection_parent:
+        ParentImage|endswith:
+            - '/apache2'
+            - '/httpd'
+            - '/nginx'
+            - '/php-fpm'
+            - '/java'
+    selection_child:
+        Image|endswith:
+            - '/sh'
+            - '/bash'
+            - '/dash'
+            - '/zsh'
+            - '/python3'
+            - '/perl'
+    condition: all of selection_*
+falsepositives:
+    - Script CGI hop le goi shell
+level: high

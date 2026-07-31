@@ -1,0 +1,46 @@
+name: ECS mapping for Linux logs collected by Elastic Agent
+priority: 25
+transformations:
+  - id: linux_process_fields
+    type: field_name_mapping
+    mapping:
+      Image: process.executable
+      CommandLine: process.command_line
+      ParentImage: process.parent.executable
+      ParentCommandLine: process.parent.command_line
+      User: user.name
+      CurrentDirectory: process.working_directory
+      TargetFilename: file.path
+      SourceIp: source.ip
+      DestinationIp: destination.ip
+      DestinationPort: destination.port
+    rule_conditions:
+      - type: logsource
+        product: linux
+  - id: linux_auditd_dataset
+    type: add_condition
+    conditions:
+      event.dataset: auditd_manager.auditd
+    rule_conditions:
+      - type: logsource
+        product: linux
+        category: process_creation
+      - type: logsource
+        product: linux
+        service: auditd
+    rule_cond_op: or
+  - id: linux_auth_dataset
+    type: add_condition
+    conditions:
+      event.dataset: system.auth
+    rule_conditions:
+      - type: logsource
+        product: linux
+        service: sshd
+      - type: logsource
+        product: linux
+        service: sudo
+      - type: logsource
+        product: linux
+        service: auth
+    rule_cond_op: or

@@ -1,0 +1,32 @@
+title: DNS Query to Tunneling or Dynamic DNS Provider
+id: c9586bbb-4fb2-4411-2d4b-5061728394a5
+status: experimental
+description: Truy van DNS toi cac dich vu tunnel/dynamic DNS thuong dung lam C2 (ngrok, trycloudflare, duckdns, no-ip)
+references:
+    - https://attack.mitre.org/techniques/T1071/004/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.command-and-control
+    - attack.t1071.004
+    - attack.t1568.002
+logsource:
+    product: windows
+    category: dns_query
+    definition: 'Yeu cau bat DnsQuery trong config Sysmon (Event ID 22)'
+detection:
+    selection:
+        QueryName|endswith:
+            - '.ngrok.io'
+            - '.ngrok-free.app'
+            - '.trycloudflare.com'
+            - '.duckdns.org'
+            - '.no-ip.org'
+            - '.hopto.org'
+            - '.serveo.net'
+            - '.loca.lt'
+            - '.tunnelto.dev'
+    condition: selection
+falsepositives:
+    - Dev dung ngrok de test webhook
+level: high

@@ -1,0 +1,32 @@
+title: Offensive Tooling Keywords in PowerShell ScriptBlock
+id: 5e4d7f44-3ea1-4d20-8c34-4f5a6b7c8d94
+status: experimental
+description: Phat hien tu khoa cua framework tan cong (Invoke-Mimikatz, PowerView, Rubeus) trong ScriptBlock 4104
+references:
+    - https://attack.mitre.org/techniques/T1059/001/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.resource-development
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    product: windows
+    category: ps_script
+    definition: 'Yeu cau bat Script Block Logging (Event ID 4104)'
+detection:
+    selection:
+        ScriptBlockText|contains:
+            - 'Invoke-Mimikatz'
+            - 'Invoke-Obfuscation'
+            - 'Invoke-DllInjection'
+            - 'Invoke-ReflectivePEInjection'
+            - 'Get-NetUser'
+            - 'Invoke-BloodHound'
+            - 'Rubeus'
+            - 'Out-EncodedCommand'
+            - 'Invoke-PSInject'
+    condition: selection
+falsepositives:
+    - Tai lieu dao tao / lab Purple Team
+level: high

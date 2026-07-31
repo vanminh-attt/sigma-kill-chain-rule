@@ -1,0 +1,38 @@
+title: Volume Shadow Copy Deletion
+id: 0d9caf00-83f6-4855-6b8f-94a5b6c7d8e9
+status: test
+description: Xoa shadow copy hoac tat recovery - buoc chuan bi cua ransomware truoc khi ma hoa
+references:
+    - https://attack.mitre.org/techniques/T1490/
+author: Purple Team Lab
+date: 2026-07-31
+tags:
+    - attack.impact
+    - attack.t1490
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_vssadmin:
+        Image|endswith:
+            - '\vssadmin.exe'
+            - '\diskshadow.exe'
+        CommandLine|contains:
+            - 'delete shadows'
+            - 'delete shadowstorage'
+            - 'resize shadowstorage'
+    selection_wmic:
+        Image|endswith: '\wmic.exe'
+        CommandLine|contains: 'shadowcopy delete'
+    selection_bcdedit:
+        Image|endswith: '\bcdedit.exe'
+        CommandLine|contains:
+            - 'recoveryenabled no'
+            - 'bootstatuspolicy ignoreallfailures'
+    selection_wbadmin:
+        Image|endswith: '\wbadmin.exe'
+        CommandLine|contains: 'delete catalog'
+    condition: 1 of selection_*
+falsepositives:
+    - Cong cu backup thu gon shadow storage (rat it)
+level: critical
